@@ -1,0 +1,10 @@
+companies
+#id [int]
++name [string]
++founded [date]
++oweners[set<string>]
+
+
+oweners
+#name [string]
++companies [set<string>]
