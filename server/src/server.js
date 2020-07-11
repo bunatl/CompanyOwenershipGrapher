@@ -11,8 +11,6 @@ const middlewares = require('./routes/middlewares');
 const port = process.env.PORT || 5555;
 
 const app = express();
-//parse body middleware (for JSON)
-app.use(express.json());
 
 //DB connections
 mongoose.connect(process.env.URL_DB, {
@@ -26,6 +24,9 @@ app.use(cors({
   //only frontend can access backend
   origin: process.env.CORS_ORIGIN,
 }));
+
+//parse body middleware (for JSON)
+app.use(express.json());
 
 //custom routes/middlewares
 app.get('/', (req, res) => {

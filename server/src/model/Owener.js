@@ -8,7 +8,7 @@ var owenerSchema = new Schema({
     required: true,
   },
   companies: [{ 
-    ico: number 
+    ico: Number 
   }],
 });
 
