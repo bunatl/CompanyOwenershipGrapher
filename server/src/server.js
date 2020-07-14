@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const disambiguation = require('./routes/disambiguation');
+const scraper = require( './routes/webscraper/scrape' );
 
 require('dotenv').config();
 
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
   })
 })
 
+app.use('/invoke', scraper);
 app.use('/test', disambiguation);
 
 app.use(middlewares.notFound);
