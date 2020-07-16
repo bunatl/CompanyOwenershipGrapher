@@ -1,7 +1,7 @@
 const url = "http://localhost:1337";
 
-export async function listOweners(){
-    const res = await fetch(`${url}/test`);
+export async function listOweners () {
+    const res = await fetch(`${ url }/invoke/generate`);
 
     return res.json();
 }

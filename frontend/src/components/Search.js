@@ -2,7 +2,19 @@ import React from 'react';
 
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
-function Search(props) {
+function Search (props) {
+
+    async function searchico (e) {
+        //prevents default element's event 
+        // e.preventDefault();
+
+        const url = "http://localhost:1337";
+        const res = await fetch(`${ url }/invoke/getico`);
+
+        console.log("clicked");
+
+    };
+
     // search ICO, name
     return (
         <div>
@@ -13,7 +25,12 @@ function Search(props) {
                     aria-describedby="icoNumber"
                 />
                 <InputGroup.Append>
-                    <Button variant="outline-secondary">Search ICO</Button>
+                    <Button
+                        variant="outline-secondary"
+                        onlick={ searchico(this) }
+                    >
+                        Search ICO
+                    </Button>
                 </InputGroup.Append>
             </InputGroup>
 
@@ -27,8 +44,8 @@ function Search(props) {
                     <Button variant="outline-secondary">Search name</Button>
                 </InputGroup.Append>
             </InputGroup>
-      </div>
+        </div>
     );
-  }
+}
 
-  export default Search;
+export default Search;

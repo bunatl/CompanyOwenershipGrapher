@@ -1,27 +1,25 @@
 const axios = require("axios");
-// const request = require('request');
 const cheerio = require("cheerio");
 
-// const https = require('https');
-
 /*  Axios guides
-https://www.youtube.com/watch?v=qM4G1Ai2ZpE
-https://www.youtube.com/watch?v=6LyagkoRWYA
+  https://www.youtube.com/watch?v=qM4G1Ai2ZpE
+  https://www.youtube.com/watch?v=6LyagkoRWYA
 */
 
 /*cheerio guides: 
-https://www.youtube.com/watch?v=LoziivfAAjE
-https://www.youtube.com/watch?v=xTxo83RtmPY
+  https://www.youtube.com/watch?v=LoziivfAAjE
+  https://www.youtube.com/watch?v=xTxo83RtmPY
 */
 
 const { Router } = require("express");
 const router = Router();
 
+// validation formula: https://cs.wikipedia.org/wiki/Identifika%C4%8Dn%C3%AD_%C4%8D%C3%ADslo_osoby#Struktura_I%C4%8CO
 function validateICO (ico) {
   let icoString = ico.toString();
   let icoLen = icoString.length;
-  let sum = 0;
   let weight = 2;
+  let sum = 0;
 
   //dont use the last number
   for (let i = icoLen - 2; i >= 0; i--)
@@ -40,8 +38,17 @@ async function fetchData (myUrl) {
       url: myUrl,
     });
 
-    if (response.status == 200)
-      parseData(response);
+    if (response.status == 200) {
+      const data = parseData(response);
+      if (data != false || data.length == 0)
+        return {
+          nazev: data[ 0 ],
+          ico: parseInt(data[ 1 ], 10),
+          spisZn: data[ 2 ],
+          denZapisu: data[ 3 ],
+          sidlo: data[ 4 ]
+        };
+    }
   } catch (error) {
     console.error(error);
   }
@@ -54,41 +61,63 @@ function isCompany (data) {
     .children("span")
     .text();
 
-  // if found 1 result the company exists
+  // if found 1 result = the company exists
   return num.includes("1");
 }
 
 function parseData (fetchedResponse) {
-  let $ = cheerio.load(fetchedResponse.data);
-
   if (!isCompany(fetchedResponse.data))
     return false;
 
-  const resultTable = $(".result-details tbody")
-    .text()
-    .replace(/\s\s+/g, "");
+  let $ = cheerio.load(fetchedResponse.data);
 
-  const company = $(".result-details tbody")
-    .children('tr')
-    .first()
-    .text()
-    .replace(/\s\s+/g, "");
+  const resultTable = [];
+  $(".result-details tbody tr")
+    .each((i, e) => {
+      //first column
+      const valueFirst = $(e).find('td')
+        .first()
+        .text()
+        .replace(/\s\s+/g, "")
+        .trim();
 
-  console.log(`${ resultTable }\n${ company }`);
+      // second column
+      const valueSecond = $(e).find('td')
+        .eq(1)
+        .text()
+        .replace(/\s\s+/g, "")
+        .trim();
+
+      resultTable.push(valueFirst);
+      resultTable.push(valueSecond);
+    });
+
+  return resultTable;
 }
 
-router.get("/", (req, res, next) => {
-  console.log("scraping...");
-
+router.get("/generate", async (req, res, next) => {
   const justiceURL = "https://or.justice.cz/ias/ui/";
   const serachParams = "rejstrik-$firma?ico=";
 
-  //100000-39999999
-  // for(let ico = 9999999; ico < 10999999; ico++)
-  //     if ( validateICO( ico ) )
-  //         console.log(ico);//fetchData ( `${ justiceURL }${ serachParams }${ ico }` );
-  fetchData(`${ justiceURL }${ serachParams }29448310`);
-  res.send("done");
+  let register = [];
+
+  // small has to be set in place, otherwise it shuts down the web server
+  for (let ico = 29448310; ico < 29448340; ico++)
+    if (validateICO(ico)) {
+      const companyData = await fetchData(`${ justiceURL }${ serachParams }${ ico }`);
+      register.push(companyData);
+      console.log(`Company with ICO ${ ico } has been proccessed.`);
+    }
+  res.json(register);
 });
+
+router.get("/getico", async (req, res, next) => {
+  if (validateICO(req.body)) {
+    const companyData = await fetchData(`${ justiceURL }${ serachParams }${ ico }`);
+    console.log(`Company with ICO ${ ico } has been proccessed.`);
+    res.json(companyData);
+  }
+});
+
 
 module.exports = router;;

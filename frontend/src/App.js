@@ -4,22 +4,21 @@ import { listCompanies, listOweners } from './DbCall';
 import Search from './components/Search';
 import ResultField from './components/ResultField';
 
+// require('dotenv').config();
 
-require('dotenv').config()
-
-
-function App() {
+function App () {
   const [ oweners, setOweners ] = useState([]);
   const [ companies, setCompanies ] = useState([]);
+  const [ searchedICO, setSearchedICO ] = useState([]);
 
   //when the component mounts
   //cant by async since it would return a promise and useeffect returns a function (for cleanUp)
   //call to the DB
-  useEffect( () => {
-  const fetchOweners = async () => {
+  useEffect(() => {
+    const fetchOweners = async () => {
       const fetchedOweners = await listOweners();
-      console.log(fetchedOweners);
-      setOweners( fetchedOweners );
+      // console.log(fetchedOweners);
+      setOweners(fetchedOweners);
     };
 
     fetchOweners();
@@ -29,15 +28,15 @@ function App() {
 
   return (
     <div className="App">
-       {/* 
+      {/* 
         * search for name and ICO
         * result field with graph
       */}
       <Search />
       <ResultField />
-      { oweners.map( ( prop, index ) => (
+      {/* { oweners.map((prop, index) => (
         <h1 key={ prop._id } > { prop.title }</h1>
-      ) ) }
+      )) } */}
 
     </div>
   );
