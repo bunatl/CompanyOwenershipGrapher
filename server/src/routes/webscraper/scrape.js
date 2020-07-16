@@ -14,6 +14,9 @@ const cheerio = require("cheerio");
 const { Router } = require("express");
 const router = Router();
 
+const justiceURL = "https://or.justice.cz/ias/ui/";
+const serachParams = "rejstrik-$firma?ico=";
+
 // validation formula: https://cs.wikipedia.org/wiki/Identifika%C4%8Dn%C3%AD_%C4%8D%C3%ADslo_osoby#Struktura_I%C4%8CO
 function validateICO (ico) {
   let icoString = ico.toString();
@@ -96,9 +99,6 @@ function parseData (fetchedResponse) {
 }
 
 router.get("/generate", async (req, res, next) => {
-  const justiceURL = "https://or.justice.cz/ias/ui/";
-  const serachParams = "rejstrik-$firma?ico=";
-
   let register = [];
 
   // small has to be set in place, otherwise it shuts down the web server
@@ -111,8 +111,9 @@ router.get("/generate", async (req, res, next) => {
   res.json(register);
 });
 
-router.get("/getico", async (req, res, next) => {
-  if (validateICO(req.body)) {
+router.post("/getico", async (req, res, next) => {
+  const ico = req.body.ico;
+  if (validateICO(ico)) {
     const companyData = await fetchData(`${ justiceURL }${ serachParams }${ ico }`);
     console.log(`Company with ICO ${ ico } has been proccessed.`);
     res.json(companyData);

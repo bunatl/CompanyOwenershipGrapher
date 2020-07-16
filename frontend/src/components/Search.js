@@ -4,15 +4,25 @@ import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
 function Search (props) {
 
-    async function searchico (e) {
+    async function searchico () {
         //prevents default element's event 
         // e.preventDefault();
 
+        const dataToSend = {
+            ico: "29448310"
+        };
+
         const url = "http://localhost:1337";
-        const res = await fetch(`${ url }/invoke/getico`);
+        const res = await fetch(`${ url }/invoke/getico`, {
+            // headers need to be set
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify(dataToSend)
+        });
 
-        console.log("clicked");
-
+        console.log(res);
     };
 
     // search ICO, name
@@ -27,7 +37,7 @@ function Search (props) {
                 <InputGroup.Append>
                     <Button
                         variant="outline-secondary"
-                        onlick={ searchico(this) }
+                        onClick={ searchico }
                     >
                         Search ICO
                     </Button>

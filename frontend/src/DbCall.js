@@ -1,9 +1,9 @@
 const url = "http://localhost:1337";
 
 export async function listOweners () {
-    const res = await fetch(`${ url }/invoke/generate`);
+    // const res = await fetch(`${ url }/invoke/generate`);
 
-    return res.json();
+    // return res.json();
 }
 
 // export async function listCompanies() {
