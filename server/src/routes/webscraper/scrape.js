@@ -113,6 +113,7 @@ router.get("/generate", async (req, res, next) => {
 
 router.post("/getico", async (req, res, next) => {
   const ico = req.body.ico;
+
   if (validateICO(ico)) {
     const companyData = await fetchData(`${ justiceURL }${ serachParams }${ ico }`);
     console.log(`Company with ICO ${ ico } has been proccessed.`);
