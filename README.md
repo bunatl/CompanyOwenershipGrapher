@@ -1,4 +1,4 @@
-# Company ownership graphing tool
+# Company structure graph generator
 
 ## Description
 Company ownership graphing tool allows user to search by **ICO** or **people name** in Czech public national  register of Czech companies.
@@ -12,13 +12,14 @@ Company ownership graphing tool allows user to search by **ICO** or **people nam
 
 ### Data sources
 - [https://or.justice.cz/ias/ui/rejstrik](https://or.justice.cz/ias/ui/rejstrik)
+- [https://wwwinfo.mfcr.cz/ares/ares_xml.html.cz](https://wwwinfo.mfcr.cz/ares/ares_xml.html.cz)
 
 ## GUI
 
 ## ToDo
-- [ ] Load data into DB
 - [ ] Nicer GUI
 - [ ] Display results as a graph (most likely tree)
+- Search by name => then show list of all companies that are owener by this person
 
  
 ## License
