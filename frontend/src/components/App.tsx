@@ -7,7 +7,7 @@ import '../styles/main.scss';
 
 export const GlobalContext = createContext<any>({});
 export const App = () => {
-  const [ ico, setIco ] = useState<string>("test");
+  const [ ico, setIco ] = useState<string>("");
   const providerValue = useMemo(() => ({ ico, setIco }), [ ico, setIco ])
   console.log(ico);
 
