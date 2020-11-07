@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import { validateICO } from '../utils/icoValidation'
+import { validateICO } from '../utils/IcoValidation'
 import { GlobalContext } from '../components/App';
 
 export const SearchIcoInputGroup = () => {

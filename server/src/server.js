@@ -2,47 +2,43 @@ const express = require('express');
 //use helmet to hide some headers
 const morgan = require('morgan');
 const cors = require('cors');
-const mongoose = require('mongoose');
+
 const disambiguation = require('./routes/disambiguation');
-const scraper = require( './routes/webscraper/scrape' );
+const scraper = require('./routes/webscraper/scrape');
+const middlewares = require('./routes/middlewares');
 
 require('dotenv').config();
 
-const middlewares = require('./routes/middlewares');
-const port = process.env.PORT || 5555;
 
 const app = express();
 
-//DB connections
-mongoose.connect(process.env.URL_DB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+// const mongoose = require('mongoose');
+// //DB connections
+// mongoose.connect(process.env.URL_DB, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
 
 //middlewares
 app.use(morgan('common'));
 app.use(cors({
   //only frontend can access backend
-  origin: process.env.CORS_ORIGIN,
+  origin: process.env.CORS_ORIGIN
 }));
 
 //parse body middleware (for JSON)
 app.use(express.json());
 
-//custom routes/middlewares
-app.get('/', (req, res) => {
-  res.json({
-    message: "Hello world",
-  })
-})
-
-app.use('/invoke', scraper);
-app.use('/test', disambiguation);
+const fetchCompany = require('./api/FetchCompnay');
+app.use('/api/company', fetchCompany);
+// app.use('/invoke', scraper);
+// app.use('/test', disambiguation);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
 
-app.listen( port, () => {
-  console.log(`Ready at: ${port}`);
+const port = process.env.PORT || 5555;
+app.listen(port, () => {
+  console.log(`Ready at: ${ port }`);
 });
