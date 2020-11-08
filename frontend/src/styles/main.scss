@@ -1,17 +1,27 @@
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';
 
-.App{
+@import './abstract';
+@import './layout';
+
+body{
     width: 100%;
-    max-width: 1024px;
-    margin: 0 auto;
+    height: 100%;
+    background: white;
 }
 
-// search button
-.input-group-append{
-    min-width: 8em;
+.App{
+    @include flex(column, nowrap, space-between);
 
-    button{
-        width: 100%;
-    }
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    min-height: 100vh;
+
+    background: lightgray;
+}
+
+header h1{
+    font-size: 1.75em;
+    text-align: center;
 }

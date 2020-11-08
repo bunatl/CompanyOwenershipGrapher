@@ -6,10 +6,7 @@ const router = Router();
 
 router.get('/:ico', async (req, res, next) => {
     try {
-        // 48110566
         const response = await fetch(`http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_or.cgi?ico=${ req.params.ico }&xml=0`);
-        // const responseJSON = await response.json();
-        // const responseJSON = await response.json();
         const resXmlText = await response.text();
 
         // parse string to XML

@@ -1,0 +1,40 @@
+@import 'main.scss';
+@import 'aside.scss';
+
+#content{
+    @include flex(row, wrap, center);
+    // stretch content to whole page
+    align-items: stretch;
+    flex: 1;
+
+    main{
+        border: 1px solid orange;
+        // max-width: 1024px;
+        width: 100%;
+    }
+
+    aside{
+        // min-width: 15px;
+        border: 1px solid blue;
+        width: 100%;
+    }
+
+    @media only screen and (min-width: $desktop-width) {
+        main{
+            width: 64%;
+        }
+        aside{
+            width: 36%;
+        }
+    }
+}
+
+
+// search button
+.input-group-append{
+    min-width: 8em;
+
+    button{
+        width: 100%;
+    }
+}
