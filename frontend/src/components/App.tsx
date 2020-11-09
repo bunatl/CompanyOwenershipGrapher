@@ -1,7 +1,8 @@
 import React, { useState, createContext, useMemo, useEffect } from 'react';
 import { Search } from './Search';
 import { Graph } from './Graph';
-import { CustomFooter } from './CustomFooter'
+import { CustomFooter } from './CustomFooter';
+import { CompanyInfo } from './CompanyInfo';
 
 import '../styles/main.scss';
 import { FetchCompany } from '../utils/FetchCompany';
@@ -36,7 +37,7 @@ export const App = () => {
             <Search />
             <Graph />
           </main>
-          <aside>Info o společnosti</aside>
+          <CompanyInfo company='' />
         </div>
         <CustomFooter />
       </GlobalContext.Provider>

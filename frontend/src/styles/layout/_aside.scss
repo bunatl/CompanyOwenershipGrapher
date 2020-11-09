@@ -1,3 +1,31 @@
 aside{
+    @include flex(column, nowrap, space-between);
     padding: 1em;
+    *{
+        border: 1px solid black;
+    }
+
+    // rows
+    >div{
+        display: flex;
+        flex: 1;
+        align-items: stretch;
+        width: 100%;
+
+        // header + content
+        >div{
+            display: flex;
+            align-items: center;
+            
+            // header only
+            &:first-child{
+                min-width: 25%;
+                justify-content: center;
+            }
+            &:nth-child(2){
+                width: 100%;
+                background: crimson;
+            }
+        }
+    }
 }
