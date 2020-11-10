@@ -1,3 +1,5 @@
 main{
     padding: 1em;
+    // to strech out graph div
+    @include flex(column, nowrap, space-between);
 }
