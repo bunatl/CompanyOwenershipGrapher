@@ -1,16 +1,14 @@
 import React, { useState, useContext } from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import { validateICO } from '../utils/IcoValidation'
-import { GlobalContext } from '../components/App';
 
 export const SearchIcoInputGroup = () => {
     const [ inputIco, setInputIco ] = useState<string>("");
-    const { setIco } = useContext(GlobalContext);
 
     const searchICO = () => {
         if (validateICO(inputIco)) {
             // set to global context
-            setIco(inputIco);
+            // setIco(inputIco);
             return;
         }
 

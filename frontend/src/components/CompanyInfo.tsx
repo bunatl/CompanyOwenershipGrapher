@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 
 interface ICompanyInfo {
-    company: string;
+
 }
 
-export const CompanyInfo: FC<ICompanyInfo> = ({ company }) => {
+export const CompanyInfo: FC<ICompanyInfo> = () => {
 
     return (
         <aside>
