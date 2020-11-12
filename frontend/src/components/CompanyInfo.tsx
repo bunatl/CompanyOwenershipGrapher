@@ -1,11 +1,9 @@
 import React, { FC } from 'react'
 
-interface ICompanyInfo {
+export const CompanyInfo: FC = () => {
 
-}
-
-export const CompanyInfo: FC<ICompanyInfo> = () => {
-
+    // useEffect
+    // from ico from conetxt
     return (
         <aside>
             <div>

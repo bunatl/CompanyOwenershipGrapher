@@ -1,28 +1,36 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext } from 'react';
+
+import { IContext } from '../types/CompanyContext'
+import { CompanyContext } from '../contexts/CompanyContext';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import { validateICO } from '../utils/IcoValidation'
 
 export const SearchIcoInputGroup = () => {
-    const [ inputIco, setInputIco ] = useState<string>("");
+    const { companyData, dispatch } = useContext<IContext>(CompanyContext);
+    const [ inputIcoValue, setInputIcoValue ] = useState<string>("");
 
     const searchICO = () => {
-        if (validateICO(inputIco)) {
+        if (!validateICO(inputIcoValue))
+            alert('Invalid ICO. Please enter valid ICO.')
+        else {
             // set to global context
-            // setIco(inputIco);
-            return;
+            dispatch({
+                type: "SETICO",
+                payloadIco: inputIcoValue
+            })
+            // clear input
+            setInputIcoValue('');
         }
-
-        alert('Invalid ICO. Please enter valid ICO.')
     }
 
     return (
         <InputGroup className="mb-3">
             <FormControl
-                placeholder="Search by ICO"
+                placeholder={companyData.ico}
                 aria-label="icoNumber"
                 aria-describedby="icoNumber"
-                value={inputIco}
-                onChange={e => setInputIco(e.target.value)}
+                value={inputIcoValue}
+                onChange={e => setInputIcoValue(e.target.value)}
             />
             <InputGroup.Append>
                 <Button
