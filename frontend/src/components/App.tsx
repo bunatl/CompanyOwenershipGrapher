@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Search } from './Search';
 import { Graph } from './Graph';
 import { CustomFooter } from './CustomFooter';
 import { CompanyInfo } from './CompanyInfo';
-
-import { FetchCompany } from '../utils/FetchCompany';
 
 import { IContext } from '../types/CompanyContext'
 import { CompanyContext } from '../contexts/CompanyContext';
@@ -13,19 +11,7 @@ import '../styles/main.scss';
 
 // test ICO 48110566
 export const App = () => {
-  const { companyData, dispatch } = useContext<IContext>(CompanyContext);
-
-  useEffect(() => {
-    const callAsynchronosly = async () => {
-      try {
-        await FetchCompany(companyData.ico);
-      } catch (err) {
-
-      }
-    }
-
-    callAsynchronosly();
-  }, [ companyData.ico ])
+  const { companyData } = useContext<IContext>(CompanyContext);
 
   return (
     <div className="App">

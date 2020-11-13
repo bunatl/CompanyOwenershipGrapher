@@ -1,10 +1,5 @@
 import React, { createContext, FC, useMemo, useReducer } from 'react';
-import { ICompany, IData, ReducerActions, IContext } from '../types/CompanyContext'
-
-const company: ICompany = {
-    name: 'abc',
-    ico: '12345'
-}
+import { IData, ReducerActions, IContext } from '../types/CompanyContext'
 
 const initData: IData = {
     ico: 'Search by ICO',

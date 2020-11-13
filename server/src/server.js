@@ -7,6 +7,7 @@ const disambiguation = require('./routes/disambiguation');
 const scraper = require('./routes/webscraper/scrape');
 const middlewares = require('./routes/middlewares');
 
+const fetchCompany = require('./api/FetchCompnay');
 require('dotenv').config();
 
 
@@ -29,8 +30,8 @@ app.use(cors({
 //parse body middleware (for JSON)
 app.use(express.json());
 
-const fetchCompany = require('./api/FetchCompnay');
-app.use('/api/company', fetchCompany);
+const test = (res, req, next) => { console.log('work'); next(); };
+app.use('/api/company', test, fetchCompany);
 // app.use('/invoke', scraper);
 // app.use('/test', disambiguation);
 
