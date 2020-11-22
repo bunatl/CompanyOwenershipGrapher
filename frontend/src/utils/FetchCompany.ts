@@ -17,9 +17,8 @@ const parseCinnosti = (obj: any) => {
 
 const parseKapital = (obj: any) => {
     const objRes = obj[ 'dtt:Kapital' ][ 'dtt:Zakladni' ];
-    console.log(objRes);
     const res = objRes.reduce((acc: any, current: any) => {
-        // only if that person stil owen portion of the company
+        // only if that person still owen portion of the company
         if (current[ '_attributes' ].ddo === undefined)
             acc.push({
                 vklad: current[ 'dtt:Vklad' ][ 'dtt:Kc' ][ '_text' ],
@@ -31,6 +30,26 @@ const parseKapital = (obj: any) => {
     return res;
 };
 
+const parseProkuratura = (obj: any) => {
+    const objRes = obj[ 'dtt:Prokura' ][ 'dtt:Prokurista' ];
+    console.log(objRes);
+    const res = objRes.reduce((acc: any, current: any) => {
+        // only if that person is still part of the company
+        if (current[ '_attributes' ].ddo === undefined)
+            console.log(current);
+        acc.push({
+            od: current[ '_attributes' ].dod,
+            // bydliste: `${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_ulice' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Cislo_orientacni' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_cesti_obce' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_obce' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_okresu' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:PSC' ][ '_text' ]}`,
+            // dob: current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Datum_narozeni' ][ '_text' ],
+            name: `${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Titul_pred' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Jmeno' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Prijmeni' ][ '_text' ]}`,
+        });
+        return acc;
+    }, [])
+    console.log(res);
+
+    return res;
+}
+
 export const FetchCompany = async (ico: string) => {
     try {
         ico = '48110566';
@@ -40,7 +59,6 @@ export const FetchCompany = async (ico: string) => {
         const data = resJSON[ "are:Ares_odpovedi" ][ 'are:Odpoved' ][ 'dtt:Vypis_OR' ];
         console.log(data);
 
-        // dtt:Prokura
         // dtt:Registrace
         // dtt:Spolecnici_s_vkladem
         // dtt:Statutarni_organ
@@ -50,7 +68,7 @@ export const FetchCompany = async (ico: string) => {
         return {
             cinnosti: parseCinnosti(data),
             kapital: parseKapital(data),
-            prokura: {},
+            prokura: parseProkuratura(data),
             registrace: {},
             spolecnici: {},
             organy: {},
