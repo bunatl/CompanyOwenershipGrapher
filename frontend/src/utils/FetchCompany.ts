@@ -32,21 +32,40 @@ const parseKapital = (obj: any) => {
 
 const parseProkuratura = (obj: any) => {
     const objRes = obj[ 'dtt:Prokura' ][ 'dtt:Prokurista' ];
-    console.log(objRes);
     const res = objRes.reduce((acc: any, current: any) => {
         // only if that person is still part of the company
         if (current[ '_attributes' ].ddo === undefined)
-            console.log(current);
-        acc.push({
-            od: current[ '_attributes' ].dod,
-            // bydliste: `${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_ulice' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Cislo_orientacni' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_cesti_obce' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_obce' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_okresu' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:PSC' ][ '_text' ]}`,
-            // dob: current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Datum_narozeni' ][ '_text' ],
-            name: `${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Titul_pred' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Jmeno' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Prijmeni' ][ '_text' ]}`,
-        });
+            acc.push({
+                od: current[ '_attributes' ].dod,
+                bydliste: `${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_ulice' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Cislo_orientacni' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_casti_obce' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_obce' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:Nazev_okresu' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Bydliste' ][ 'dtt:PSC' ][ '_text' ]}`,
+                dob: current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Datum_narozeni' ][ '_text' ],
+                name: `${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Titul_pred' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Jmeno' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Prijmeni' ][ '_text' ]}`,
+            });
         return acc;
-    }, [])
-    console.log(res);
+    }, []);
+    return res;
+}
 
+const parseRegistrace = (obj: any) => {
+    const objRes = obj[ 'dtt:Registrace' ][ 'dtt:Spisova_znacka' ];
+    const res = `${objRes[ 'dtt:Soud' ][ 'dtt:Text' ][ '_text' ]}, ${objRes[ 'dtt:Oddil_vlozka' ][ '_text' ]}`;
+    return res;
+}
+
+const parseSpolecnici = (obj: any) => {
+    const objRes = obj[ 'dtt:Spolecnici_s_vkladem' ][ 'dtt:Spolecnik_s_vkladem' ];
+    const res = objRes.reduce((acc: any, current: any) => {
+        // only if that person is still part of the company
+        if (current[ '_attributes' ].ddo === undefined && current[ 'dtt:Vklad_spolecnika' ][ 'dtt:Obchodni_podil' ] !== undefined)
+            acc.push({
+                osoba: `${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Titul_pred' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Jmeno' ][ '_text' ]} ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Prijmeni' ][ '_text' ]}, ${current[ 'dtt:Fyzicka_osoba' ][ 'dtt:Datum_narozeni' ][ '_text' ]}`,
+                podil: current[ 'dtt:Vklad_spolecnika' ][ 'dtt:Obchodni_podil' ][ 'dtt:Text' ][ '_text' ],
+                splaceno: current[ 'dtt:Vklad_spolecnika' ][ 'dtt:Splaceno' ][ 'dtt:Procenta' ][ '_text' ],
+                vklad: current[ 'dtt:Vklad_spolecnika' ][ 'dtt:Vklad' ][ 'dtt:Kc' ][ '_text' ],
+                dod: current[ 'dtt:Vklad_spolecnika' ][ '_attributes' ].dod
+            });
+        return acc;
+    }, []);
     return res;
 }
 
@@ -59,7 +78,6 @@ export const FetchCompany = async (ico: string) => {
         const data = resJSON[ "are:Ares_odpovedi" ][ 'are:Odpoved' ][ 'dtt:Vypis_OR' ];
         console.log(data);
 
-        // dtt:Registrace
         // dtt:Spolecnici_s_vkladem
         // dtt:Statutarni_organ
         // dtt:Uvod
@@ -69,8 +87,8 @@ export const FetchCompany = async (ico: string) => {
             cinnosti: parseCinnosti(data),
             kapital: parseKapital(data),
             prokura: parseProkuratura(data),
-            registrace: {},
-            spolecnici: {},
+            registrace: parseRegistrace(data),
+            spolecnici: parseSpolecnici(data),
             organy: {},
             uvod: {},
             zaklUdaje: {}
