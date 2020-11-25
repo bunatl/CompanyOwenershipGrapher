@@ -69,6 +69,21 @@ const parseSpolecnici = (obj: any) => {
     return res;
 }
 
+const parseOrgany = (obj: any) => {
+    const objRes = obj[ 'dtt:Statutarni_organ' ][ 'dtt:Clen_SO' ];
+    const res = objRes.reduce((acc: any, current: any) => {
+        if (current[ '_attributes' ].ddo === undefined)
+            acc.push({
+                funkce: current[ 'dtt:Clen' ][ 'dtt:Funkce' ][ '_text' ],
+                veFunkciOd: current[ 'dtt:Clen' ][ 'dtt:Ve_funkci' ][ 'dtt:Datum_zacatku' ][ '_text' ],
+                fo: `${current[ 'dtt:Clen' ][ 'dtt:Fyzicka_osoba' ][ 'dtt:Titul_pred' ][ '_text' ]} ${current[ 'dtt:Clen' ][ 'dtt:Fyzicka_osoba' ][ 'dtt:Jmeno' ][ '_text' ]} ${current[ 'dtt:Clen' ][ 'dtt:Fyzicka_osoba' ][ 'dtt:Prijmeni' ][ '_text' ]}, ${current[ 'dtt:Clen' ][ 'dtt:Fyzicka_osoba' ][ 'dtt:Datum_narozeni' ][ '_text' ]}`,
+                dod: current[ '_attributes' ].dod
+            });
+        return acc;
+    }, []);
+    return res;
+}
+
 export const FetchCompany = async (ico: string) => {
     try {
         ico = '48110566';
@@ -78,8 +93,6 @@ export const FetchCompany = async (ico: string) => {
         const data = resJSON[ "are:Ares_odpovedi" ][ 'are:Odpoved' ][ 'dtt:Vypis_OR' ];
         console.log(data);
 
-        // dtt:Spolecnici_s_vkladem
-        // dtt:Statutarni_organ
         // dtt:Uvod
         // dtt:Zakladni_udaje
 
@@ -89,7 +102,7 @@ export const FetchCompany = async (ico: string) => {
             prokura: parseProkuratura(data),
             registrace: parseRegistrace(data),
             spolecnici: parseSpolecnici(data),
-            organy: {},
+            organy: parseOrgany(data),
             uvod: {},
             zaklUdaje: {}
         };
