@@ -84,6 +84,16 @@ const parseOrgany = (obj: any) => {
     return res;
 }
 
+const parseUdaje = (obj: any) => {
+    const objRes = obj[ 'dtt:Zakladni_udaje' ];
+    return {
+        zapis: objRes[ 'dtt:Datum_zapisu_OR' ][ '_text' ],
+        forma: objRes[ 'dtt:Pravni_forma_OR' ][ 'dtt:Nazev_PF' ][ '_text' ],
+        stav: objRes[ 'dtt:Stav' ][ 'dtt:Stav_subjektu' ][ '_text' ],
+        nazev: objRes[ 'dtt:Obchodni_firma' ][ '0' ][ '_text' ]
+    };
+}
+
 export const FetchCompany = async (ico: string) => {
     try {
         ico = '48110566';
@@ -104,7 +114,7 @@ export const FetchCompany = async (ico: string) => {
             spolecnici: parseSpolecnici(data),
             organy: parseOrgany(data),
             uvod: {},
-            zaklUdaje: {}
+            zaklUdaje: parseUdaje(data)
         };
     } catch (err) {
         console.error(err);
