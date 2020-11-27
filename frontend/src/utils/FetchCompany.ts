@@ -94,6 +94,11 @@ const parseUdaje = (obj: any) => {
     };
 }
 
+const parseUvod = (obj: any) => {
+    const objRes = obj[ 'dtt:Uvod' ];
+    return objRes;
+}
+
 export const FetchCompany = async (ico: string) => {
     try {
         ico = '48110566';
@@ -104,7 +109,6 @@ export const FetchCompany = async (ico: string) => {
         console.log(data);
 
         // dtt:Uvod
-        // dtt:Zakladni_udaje
 
         return {
             cinnosti: parseCinnosti(data),
@@ -113,7 +117,7 @@ export const FetchCompany = async (ico: string) => {
             registrace: parseRegistrace(data),
             spolecnici: parseSpolecnici(data),
             organy: parseOrgany(data),
-            uvod: {},
+            uvod: parseUvod(data),
             zaklUdaje: parseUdaje(data)
         };
     } catch (err) {
