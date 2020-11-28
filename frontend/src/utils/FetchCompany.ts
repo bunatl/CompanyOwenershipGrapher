@@ -95,8 +95,7 @@ const parseUdaje = (obj: any) => {
 }
 
 const parseUvod = (obj: any) => {
-    const objRes = obj[ 'dtt:Uvod' ];
-    return objRes;
+    return obj[ 'dtt:Uvod' ][ 'dtt:Aktualizace_DB' ][ '_text' ];
 }
 
 export const FetchCompany = async (ico: string) => {
