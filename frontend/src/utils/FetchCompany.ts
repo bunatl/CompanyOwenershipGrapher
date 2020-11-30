@@ -105,9 +105,6 @@ export const FetchCompany = async (ico: string) => {
         const resString = await res.json();
         const resJSON = JSON.parse(resString);
         const data = resJSON[ "are:Ares_odpovedi" ][ 'are:Odpoved' ][ 'dtt:Vypis_OR' ];
-        console.log(data);
-
-        // dtt:Uvod
 
         return {
             cinnosti: parseCinnosti(data),

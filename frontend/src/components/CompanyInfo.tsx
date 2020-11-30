@@ -9,19 +9,17 @@ export const CompanyInfo: FC = () => {
 
     useEffect(() => {
         const callAsynchronosly = async () => {
-            console.log('test');
-            console.log(typeof companyData.selectedCompany);
-
             try {
+                console.log(companyData.selectedCompany);
                 const res = await FetchCompany(companyData.selectedCompany);
+                console.log(res);
+
                 setFetchedCompany(res);
             } catch (err) {
                 console.log('An error has occured. The error:');
                 console.error(err);
             }
         }
-
-        console.log('test2');
         if (companyData.selectedCompany !== '') callAsynchronosly();
     }, [ companyData.selectedCompany, companyData.asideOpen ])
 

@@ -6,14 +6,15 @@ import { CompanyContext } from '../contexts/CompanyContext';
 
 export const Graph = () => {
     const { companyData, dispatch } = useContext<IContext>(CompanyContext);
-    const [ companiesTree, setCompaniesTree ] = useState<ICompany[]>([]);
+    // const [ companiesTree, setCompaniesTree ] = useState<ICompany[]>([]);
+    const [ companiesTree, setCompaniesTree ] = useState<any[]>([]);
 
     useEffect(() => {
         const callAsynchronosly = async () => {
             try {
                 const res = await FetchCompany(companyData.selectedCompany);
-                // console.log(res);
-                // setCompaniesTree(res);
+                console.log(res);
+                setCompaniesTree([ res ]);
             } catch (err) {
                 console.log('An error has occured. The error:');
                 console.error(err);
