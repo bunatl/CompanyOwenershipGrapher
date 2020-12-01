@@ -13,7 +13,6 @@ export const Graph = () => {
         const callAsynchronosly = async () => {
             try {
                 const res = await FetchCompany(companyData.selectedCompany);
-                console.log(res);
                 setCompaniesTree([ res ]);
             } catch (err) {
                 console.log('An error has occured. The error:');
