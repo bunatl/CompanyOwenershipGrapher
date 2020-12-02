@@ -3,8 +3,8 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 
-const disambiguation = require('./routes/disambiguation');
-const scraper = require('./routes/webscraper/scrape');
+// const disambiguation = require('./routes/disambiguation');
+// const scraper = require('./routes/webscraper/scrape');
 const middlewares = require('./routes/middlewares');
 
 const fetchCompany = require('./api/FetchCompnay');
@@ -13,12 +13,6 @@ require('dotenv').config();
 
 const app = express();
 
-// const mongoose = require('mongoose');
-// //DB connections
-// mongoose.connect(process.env.URL_DB, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// });
 
 //middlewares
 app.use(morgan('common'));
